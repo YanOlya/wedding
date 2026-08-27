@@ -1,0 +1,320 @@
+/* ═══════════════════════════════════════════════════════════
+   База. Палитра снята пипеткой прямо со слайдов, поэтому фон
+   страницы совпадает с фоном картинок — стыков не видно.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --cream:#FFFDEA;        /* фон слайдов 1, 2, 4, 5, 6 */
+  --ivory:#FFF2E1;        /* дресс-код: тёплый беж — карточки формы */
+  --taupe:#DCCCBD;        /* дресс-код: тауп — рамки и линии */
+  --rose:#C09D9B;         /* дресс-код: пыльная роза — акценты */
+  --brown:#533B2F;        /* дресс-код: тёмный шоколад — подписи */
+
+  /* Розовый конверт со слайда «Пожелания» — для интро */
+  --pink:#FDC7C7;
+  --pink-light:#FFD8D9;
+  --pink-deep:#F6B5B6;
+
+  --wine:#810E1F;         /* заголовки и сердечки со слайдов */
+  --wine-deep:#5F0A16;    /* тёмный бордо для нажатий */
+  --ink:#0A0A0A;          /* основной текст со слайдов */
+
+  --muted:#8B7566;        /* осветлённый --brown */
+  --placeholder:#B7A492;
+  --field:#FFFDF4;        /* поля ввода — чуть светлее карточки */
+
+  --radius:18px;
+  --shadow:0 6px 26px rgba(83,59,47,.09);
+  --maxw:600px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px}
+
+/* ── Слайды ─────────────────────────────────── */
+.slide{
+  margin:0 auto;
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);
+}
+.slide.in{opacity:1;transform:none}
+.slide--first{opacity:1;transform:none}
+.slide img{display:block;width:100%;height:auto}
+
+/* Кнопка карты под слайдом с локацией */
+.slide-action{display:flex;justify-content:center;margin:-2px 0 38px}
+.map-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:14px 26px;
+  border-radius:999px;
+  background:var(--wine);
+  color:var(--cream);
+  text-decoration:none;
+  font-size:15px;
+  font-weight:600;
+  box-shadow:0 6px 20px rgba(129,14,31,.24);
+  transition:transform .2s ease,background .2s ease;
+}
+.map-btn:hover{background:var(--wine-deep);transform:translateY(-2px)}
+.map-btn:active{transform:translateY(0)}
+.map-btn svg{width:17px;height:17px;flex:none}
+
+/* Подсказка «листайте вниз» */
+.scroll-hint{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  padding:20px 0 32px;
+  color:var(--wine);
+  font-family:'Comfortaa',cursive;
+  font-size:13px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  transition:opacity .4s ease;
+}
+.scroll-hint span{opacity:.75}
+.scroll-hint svg{width:20px;height:20px;animation:bob 1.9s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+.scroll-hint.hide{opacity:0;pointer-events:none}
+
+/* ── Секция подтверждения ───────────────────── */
+.rsvp{padding:50px 0 12px}
+
+.eyebrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin:0 0 14px;
+  color:var(--wine);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+}
+.eyebrow::before,.eyebrow::after{content:'';width:34px;height:1px;background:var(--taupe)}
+
+h1.rsvp-title{
+  margin:0 0 12px;
+  font-family:'Comfortaa',cursive;
+  font-weight:700;
+  font-size:clamp(34px,10vw,46px);
+  line-height:1.05;
+  color:var(--wine);
+  text-align:center;
+}
+.rsvp-lead{
+  margin:0 auto 28px;
+  max-width:420px;
+  text-align:center;
+  font-size:15px;
+  line-height:1.6;
+  color:var(--brown);
+}
+.rsvp-lead b{color:var(--wine);font-weight:600;white-space:nowrap}
+
+.card{
+  background:var(--ivory);
+  border:1px solid var(--taupe);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px 20px;
+  margin-bottom:16px;
+}
+
+.label{
+  display:block;
+  margin:0 0 12px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.qtitle{
+  margin:0 0 4px;
+  font-family:'Comfortaa',cursive;
+  font-size:19px;
+  font-weight:700;
+  color:var(--ink);
+}
+.hint{margin:0;font-size:13px;line-height:1.5;color:var(--muted)}
+.hint--after{margin-top:10px}
+
+input[type=text],textarea{
+  width:100%;
+  font-family:inherit;
+  font-size:16px;
+  color:var(--ink);
+  background:var(--field);
+  border:1px solid var(--taupe);
+  border-radius:14px;
+  padding:16px;
+  transition:border-color .2s ease,box-shadow .2s ease;
+  -webkit-appearance:none;
+}
+textarea{min-height:104px;resize:vertical;line-height:1.5}
+input[type=text]::placeholder,textarea::placeholder{color:var(--placeholder)}
+input[type=text]:focus,textarea:focus{
+  outline:none;
+  border-color:var(--wine);
+  box-shadow:0 0 0 3px rgba(129,14,31,.10);
+}
+input.err,textarea.err{border-color:var(--wine);background:rgba(192,157,155,.14)}
+
+/* Варианты выбора */
+.options{display:flex;flex-direction:column;gap:10px}
+.opt{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:15px 17px;
+  background:var(--field);
+  border:1px solid var(--taupe);
+  border-radius:14px;
+  cursor:pointer;
+  font-size:15.5px;
+  line-height:1.35;
+  transition:border-color .18s ease,background .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.opt:hover{border-color:var(--rose)}
+.opt input{position:absolute;opacity:0;width:0;height:0}
+.mark{
+  flex:none;
+  width:21px;
+  height:21px;
+  border:1.5px solid var(--rose);
+  display:grid;
+  place-items:center;
+  transition:background .18s ease,border-color .18s ease;
+}
+.mark--radio{border-radius:50%}
+.mark--check{border-radius:6px}
+.mark svg{
+  width:12px;height:12px;
+  color:var(--cream);
+  opacity:0;transform:scale(.6);
+  transition:opacity .18s ease,transform .18s ease;
+}
+.opt input:checked ~ .mark{background:var(--wine);border-color:var(--wine)}
+.opt input:checked ~ .mark svg{opacity:1;transform:scale(1)}
+.opt.checked{border-color:var(--wine);background:rgba(129,14,31,.05)}
+.opt input:focus-visible ~ .mark{box-shadow:0 0 0 3px rgba(129,14,31,.18)}
+
+/* Блок с алкоголем — сворачивается, если гость не придёт.
+   max-height задаётся инлайном из скрипта, поэтому здесь его нет:
+   инлайновый стиль всё равно перебил бы это правило. */
+#drinksCard{
+  overflow:hidden;
+  transition:max-height .5s cubic-bezier(.3,.7,.2,1),opacity .35s ease,
+             margin-bottom .5s ease,padding .5s ease;
+}
+#drinksCard.collapsed{
+  opacity:0;
+  margin-bottom:0;
+  padding-top:0;
+  padding-bottom:0;
+  border-width:0;
+}
+
+.note{
+  background:rgba(192,157,155,.16);
+  border:1px dashed var(--rose);
+  border-radius:14px;
+  padding:15px 17px;
+  margin:18px 0 16px;
+  font-size:14px;
+  line-height:1.55;
+  color:var(--brown);
+}
+
+.submit{
+  position:relative;
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:999px;
+  background:var(--wine);
+  color:var(--cream);
+  font-family:'Comfortaa',cursive;
+  font-size:17px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 24px rgba(129,14,31,.26);
+  transition:background .2s ease,transform .15s ease;
+}
+.submit:hover{background:var(--wine-deep)}
+.submit:active{transform:scale(.985)}
+.submit.done{background:var(--brown);box-shadow:0 8px 24px rgba(83,59,47,.24)}
+
+.result{display:none;margin-top:16px}
+.result.show{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.result textarea{min-height:150px;font-size:14px;color:var(--brown)}
+.result .hint{margin-top:9px;text-align:center}
+
+.errmsg{
+  display:none;
+  margin:0 0 14px;
+  padding:13px 16px;
+  border-radius:12px;
+  background:rgba(192,157,155,.20);
+  border:1px solid var(--rose);
+  color:var(--wine);
+  font-size:14px;
+  font-weight:500;
+  line-height:1.45;
+}
+.errmsg.show{display:block}
+
+/* ── Финал ──────────────────────────────────── */
+footer{text-align:center;padding:56px 20px 70px}
+.date-line{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin:0 0 16px;
+  color:var(--wine);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.32em;
+}
+.date-line::before,.date-line::after{content:'';width:30px;height:1px;background:var(--taupe)}
+.final{
+  margin:0 auto;
+  max-width:340px;
+  font-family:'Comfortaa',cursive;
+  font-weight:700;
+  font-size:clamp(23px,6.6vw,30px);
+  line-height:1.28;
+  color:var(--wine);
+}
+.heart{display:inline-block;margin-top:22px;font-size:22px;animation:beat 1.7s ease-in-out infinite}
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  18%{transform:scale(1.18)}
+  36%{transform:scale(1)}
+  54%{transform:scale(1.12)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .slide{opacity:1 !important;transform:none !important}
+  html{scroll-behavior:auto}
+}

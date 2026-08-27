@@ -1,0 +1,272 @@
+/* ═══════════════════════════════════════════════════════════
+   Анимации. Каждый блок включается классом на <body>:
+     fx-hearts-on     плывущие сердечки по фону
+     fx-divider-on    рисованные разделители между слайдами
+     fx-progress-on   полоска прогресса прокрутки сверху
+     fx-burst-on      салют из сердечек по кнопке
+     fx-stagger-on    карточки формы появляются по очереди
+     fx-countdown-on  обратный отсчёт до свадьбы
+     fx-env-on        интро с конвертом
+   Всё, что не включено, скрыто и не тратит ресурсы.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Полоска прогресса прокрутки ─────────────── */
+.fx-progress{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:3px;
+  z-index:60;
+  pointer-events:none;
+}
+.fx-progress i{
+  display:block;
+  height:100%;
+  background:var(--wine);
+  transform:scaleX(0);
+  transform-origin:0 50%;
+  will-change:transform;
+}
+body:not(.fx-progress-on) .fx-progress{display:none}
+
+/* ── Плывущие сердечки ───────────────────────── */
+/* multiply вместо opacity: на креме сердечко мягко темнеет,
+   а на бордовом слайде локации почти исчезает — не мешает фото. */
+.fx-hearts{
+  position:fixed;
+  inset:0;
+  z-index:40;
+  pointer-events:none;
+  overflow:hidden;
+  mix-blend-mode:multiply;
+}
+.fx-hearts svg{
+  position:absolute;
+  bottom:-48px;
+  color:var(--wine);
+  opacity:0;
+  animation-name:float-up;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+  will-change:transform,opacity;
+}
+@keyframes float-up{
+  0%  {transform:translate(0,0) rotate(0deg) scale(.9);opacity:0}
+  10% {opacity:var(--o)}
+  50% {transform:translate(var(--sway),-45vh) rotate(calc(var(--r) / 2)) scale(1)}
+  88% {opacity:var(--o)}
+  100%{transform:translate(0,calc(-100vh - 90px)) rotate(var(--r)) scale(1.06);opacity:0}
+}
+body:not(.fx-hearts-on) .fx-hearts{display:none}
+
+/* ── Рисованные разделители ──────────────────── */
+.fx-divider{
+  display:flex;
+  justify-content:center;
+  padding:30px 0;
+}
+.fx-divider svg{
+  width:min(76%,308px);
+  height:auto;
+  overflow:visible;
+}
+.fx-divider path{
+  fill:none;
+  stroke:var(--wine);
+  stroke-linecap:round;
+  stroke-dasharray:var(--len,600);
+  stroke-dashoffset:var(--len,600);
+  transition:stroke-dashoffset 1.5s cubic-bezier(.4,.05,.2,1);
+}
+.fx-divider .wave{stroke-width:4.5}
+.fx-divider .hrt{stroke-width:3.4;transition-delay:.55s}
+.fx-divider.in path{stroke-dashoffset:0}
+body:not(.fx-divider-on) .fx-divider{display:none}
+
+/* ── Салют из сердечек по кнопке ─────────────── */
+.fx-spark{
+  position:fixed;
+  z-index:70;
+  pointer-events:none;
+  color:var(--wine);
+  will-change:transform,opacity;
+  transition:transform 1s cubic-bezier(.15,.6,.3,1),opacity 1s ease;
+}
+
+/* ── Карточки формы по очереди ───────────────── */
+body.fx-stagger-on .card{
+  transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1);
+}
+body.fx-stagger-on .card.fx-hide{
+  opacity:0;
+  transform:translateY(20px);
+}
+
+/* ── Обратный отсчёт ────────────────────────── */
+.countdown{
+  padding:46px 0 6px;
+  text-align:center;
+}
+.cd-grid{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  gap:clamp(6px,3vw,18px);
+  margin-top:18px;
+}
+.cd-cell{
+  min-width:clamp(56px,17vw,78px);
+}
+.cd-num{
+  display:block;
+  font-family:'Comfortaa',cursive;
+  font-weight:700;
+  font-size:clamp(30px,9.5vw,42px);
+  line-height:1.05;
+  color:var(--wine);
+}
+.cd-num.tick{animation:cd-tick .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes cd-tick{
+  0%  {transform:translateY(-42%);opacity:0}
+  100%{transform:none;opacity:1}
+}
+.cd-lbl{
+  display:block;
+  margin-top:6px;
+  font-size:10.5px;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.cd-sep{
+  font-family:'Comfortaa',cursive;
+  font-size:clamp(22px,7vw,32px);
+  line-height:1.3;
+  color:var(--rose);
+}
+.cd-done{
+  margin:16px auto 0;
+  max-width:320px;
+  font-family:'Comfortaa',cursive;
+  font-weight:700;
+  font-size:clamp(22px,6.4vw,28px);
+  line-height:1.3;
+  color:var(--wine);
+}
+body:not(.fx-countdown-on) .countdown{display:none}
+
+/* ── Интро с конвертом ──────────────────────── */
+/* Работает на чистом CSS через скрытый чекбокс: даже если скрипт
+   не загрузится, конверт всё равно откроется по тапу. */
+.env-toggle{
+  position:absolute;
+  width:1px;height:1px;
+  margin:-1px;
+  padding:0;
+  border:0;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  white-space:nowrap;
+}
+.fx-envelope{
+  position:fixed;
+  inset:0;
+  z-index:90;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:30px;
+  background:var(--cream);
+  cursor:pointer;
+  perspective:1100px;
+  transition:opacity .85s ease .5s,visibility .85s ease .5s;
+  -webkit-tap-highlight-color:transparent;
+}
+.env-art{
+  position:relative;
+  width:min(66vw,260px);
+  aspect-ratio:4 / 3;
+  transition:transform .9s cubic-bezier(.3,.7,.2,1) .35s;
+  transform-style:preserve-3d;
+}
+.env-body{
+  position:absolute;
+  inset:0;
+  border-radius:10px;
+  background:var(--pink);
+  box-shadow:0 14px 34px rgba(83,59,47,.18);
+  overflow:hidden;
+}
+/* Диагонали «кармана» конверта — как на слайде «Пожелания» */
+.env-body::before,
+.env-body::after{
+  content:'';
+  position:absolute;
+  top:0;
+  width:54%;
+  height:100%;
+  background:var(--pink-light);
+}
+.env-body::before{left:0;clip-path:polygon(0 0,100% 100%,0 100%)}
+.env-body::after{right:0;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.env-flap{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:62%;
+  background:var(--pink-deep);
+  border-radius:10px 10px 0 0;
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top center;
+  transition:transform .8s cubic-bezier(.5,-0.2,.4,1.2);
+  backface-visibility:hidden;
+}
+/* Сургучная печать: сердечко в бордо на кончике клапана */
+.env-seal{
+  position:absolute;
+  left:50%;top:62%;
+  transform:translate(-50%,-50%);
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:clamp(38px,11vw,48px);
+  height:clamp(38px,11vw,48px);
+  border-radius:50%;
+  background:var(--cream);
+  color:var(--wine);
+  box-shadow:0 3px 10px rgba(83,59,47,.20);
+  animation:beat 1.7s ease-in-out infinite;
+}
+.env-seal svg{width:56%;height:56%;display:block}
+.env-hint{
+  font-family:'Comfortaa',cursive;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--wine);
+  opacity:.8;
+  transition:opacity .3s ease;
+}
+.fx-envelope:hover .env-hint{opacity:1}
+
+/* Открытие: сначала отлетает клапан, потом конверт уезжает вперёд */
+.env-toggle:checked ~ .fx-envelope{opacity:0;visibility:hidden}
+.env-toggle:checked ~ .fx-envelope .env-flap{transform:rotateX(-172deg)}
+.env-toggle:checked ~ .fx-envelope .env-art{transform:scale(1.5) translateY(8%)}
+.env-toggle:focus-visible ~ .fx-envelope .env-art{outline:3px solid var(--wine);outline-offset:14px}
+
+/* Пока конверт закрыт — страница за ним не прокручивается.
+   Где :has() не поддерживается, просто не будет блокировки прокрутки. */
+body.fx-env-on:has(.env-toggle:not(:checked)){overflow:hidden}
+body:not(.fx-env-on) .fx-envelope,
+body:not(.fx-env-on) .env-toggle{display:none}
+
+/* ── Уважаем «уменьшить движение» ───────────── */
+@media (prefers-reduced-motion:reduce){
+  .fx-hearts{display:none !important}
+  .fx-envelope{display:none !important}
+  body.fx-env-on{overflow:visible !important}
+  .fx-divider path{stroke-dashoffset:0 !important}
+  body.fx-stagger-on .card.fx-hide{opacity:1 !important;transform:none !important}
+}
